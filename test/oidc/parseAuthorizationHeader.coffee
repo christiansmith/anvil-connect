@@ -33,7 +33,7 @@ describe 'Parse Authorization Header', ->
       req.authorization.should.eql {}
 
     it 'should continue', ->
-      next.should.have.been.calledWith undefined
+      next.firstCall.args.length.should.equal 0
 
 
 
@@ -106,7 +106,3 @@ describe 'Parse Authorization Header', ->
 
     it 'should add credentials to authorization object', ->
       req.authorization.credentials.should.equal 'token'
-
-
-
-

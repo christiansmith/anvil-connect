@@ -167,7 +167,7 @@ describe 'Get Bearer Token', ->
       req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
-      next.should.have.been.calledWith undefined
+      next.firstCall.args.length.should.equal 0
 
 
 
@@ -190,7 +190,7 @@ describe 'Get Bearer Token', ->
       req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
-      next.should.have.been.calledWith undefined
+      next.firstCall.args.length.should.equal 0
 
 
 
@@ -215,8 +215,4 @@ describe 'Get Bearer Token', ->
       req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
-      next.should.have.been.calledWith undefined
-
-
-
-
+      next.firstCall.args.length.should.equal 0
