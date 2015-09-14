@@ -49,6 +49,7 @@ module.exports = function (server) {
           Client.insert({
             client_name: 'Anvil Connect CLI',
             redirect_uris: [ settings.issuer ],
+            scopes: ['realm'],
             trusted: true
           }, function (err, client) {
             if (err) { return next(err) }
