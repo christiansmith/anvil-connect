@@ -39,6 +39,8 @@ module.exports = function (server) {
         req.body.userId = req.claims.sub
       }
 
+      req.body.trusted = req.body.trusted === 'true'
+
       Client.insert(req.body, function (err, client) {
         if (err) {
           // QUICK AND DIRTY WRAPPER AROUND MODINHA ERROR
@@ -93,6 +95,14 @@ module.exports = function (server) {
     oidc.verifyClientIdentifiers,
     function (req, res, next) {
       if (req.is('json')) {
+        if (req.body.trusted === 'true') {
+          req.body.trusted = true
+        } else if (req.body.trusted === 'false') {
+          req.body.trusted = false
+        } else {
+          delete req.body.trusted
+        }
+
         Client.patch(req.token.payload.sub, req.body, function (err, client) {
           if (err) { return next(err) }
           if (!client) { return next(new NotFoundError()) }
