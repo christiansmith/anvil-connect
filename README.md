@@ -81,6 +81,9 @@ $ nvl init
 
 #### Running with Docker
 
+**If running Docker via Boot2Docker on OS/X or Windows, see the
+[warning](#warning-for-boot2docker-users) below**
+
 Run docker-compose from the root of your new project.
 
 ```bash
@@ -105,6 +108,19 @@ $ node server.js
 # production mode
 $ NODE_ENV=production node server.js
 ```
+#### Warning for Boot2Docker Users
+If you're running on a Mac or Windows computer using boot2docker (this includes
+kitematic and docker-toolbox), then you must ensure that the project folder is
+located somewhere underneath ```/Users/``` on OS/X or ```c:\Users\``` on Windows.
+This is because boot2docker by default can only map subdirectories of these
+folders into the Docker containers.
+
+If the project folder exists within your home directory or your ```Documents```
+folder, then it will work fine.
+
+If you must locate the project folder elsewhere, see this
+[StackOverlow post](http://stackoverflow.com/questions/30586949/how-do-i-map-volume-outside-c-users-to-container-on-windows)
+for a possible procedure.
 
 ## Documentation
 
