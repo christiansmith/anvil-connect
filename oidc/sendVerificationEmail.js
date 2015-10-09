@@ -58,7 +58,7 @@ function sendVerificationEmail (req, res, next) {
       }
 
       // Send verification email
-      mailer.getMailer().sendMail('verifyEmail', locals, {
+      mailer.sendMail('verifyEmail', locals, {
         to: user.email,
         subject: 'Verify your e-mail address'
       }, function (err, responseStatus) {

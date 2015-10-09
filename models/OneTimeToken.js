@@ -80,10 +80,14 @@ OneTimeToken.consume = function (id, callback) {
   OneTimeToken.peek(id, function (err, token) {
     if (err) { return callback(err) }
 
-    OneTimeToken.revoke(id, function (err) {
-      if (err) { return callback(err) }
-      callback(null, token)
-    })
+    if (!id) {
+      callback(null, null)
+    } else {
+      OneTimeToken.revoke(id, function (err) {
+        if (err) { return callback(err) }
+        callback(null, token)
+      })
+    }
   })
 }
 

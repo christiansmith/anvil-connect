@@ -45,6 +45,8 @@ var oidc = {
   verifyClientToken: require('./verifyClientToken'),
   verifyClientIdentifiers: require('./verifyClientIdentifiers'),
   verifyEmail: require('./verifyEmail'),
+  verifyEmailValid: require('./verifyEmailValid'),
+  verifyMailerConfigured: require('./verifyMailerConfigured'),
   verifyRedirectURI: require('./verifyRedirectURI'),
   verifyAuthorizationCode: require('./verifyAuthorizationCode')
 }

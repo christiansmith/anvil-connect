@@ -88,6 +88,7 @@
     "grunt-release": "^0.13.0",
     "mocha": "^2.3.2",
     "nock": "^2.2.0",
+    "proxyquire": "^1.7.2",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.0.1"

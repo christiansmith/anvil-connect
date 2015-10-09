@@ -1,0 +1,23 @@
+doctype html
+html(lang="en")
+  head
+    title Sign up | Anvil Connect
+
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300|Playfair+Display+SC:900,400')
+  body
+
+    .anvilform
+      img.logo(src='/images/anvil.svg', alt='Anvil Connect')
+
+      form.panel(method='POST')
+        p= error
+        input(type='hidden', name='token', value=token)
+        hr.textsep.signup
+        p
+          | Create a new account for email #{email}. 
+          | This form must be submitted within one day.
+        input(type='text', name='givenName', placeholder='First Name')
+        input(type='text', name='familyName', placeholder='Last Name')
+        input.callout.full(type='submit', value='Sign up')

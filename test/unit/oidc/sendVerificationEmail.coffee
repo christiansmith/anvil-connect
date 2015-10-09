@@ -3,35 +3,30 @@ sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
 expect    = chai.expect
 
-
-
-
 chai.use sinonChai
 chai.should()
 
-
-
-mailer = require '../../../boot/mailer'
-fakeMailer =
-  sendMail: (tmpl, loc, opts, cb) ->
-    cb()
 {sendVerificationEmail} = require '../../../oidc'
 OneTimeToken = require '../../../models/OneTimeToken'
 
-
+TestSettings = require '../../lib/testSettings'
 
 describe 'Send Verification Email', ->
 
+  mailer = require '../../../boot/mailer'
+  tsMailer = {}
+
   before ->
-    sinon.stub mailer, 'getMailer', ->
-      fakeMailer
+    tsMailer = new TestSettings(mailer,
+      sendMail : (tmpl, loc, opts, cb) ->
+        cb()
+      )
 
   after ->
-    mailer.getMailer.restore()
+    tsMailer.restore()
 
 
   {req,res,next} = {}
-
 
   describe 'when not requested', ->
 
@@ -45,13 +40,13 @@ describe 'Send Verification Email', ->
       next = sinon.spy()
 
       sinon.spy(OneTimeToken, 'issue')
-      sinon.spy(fakeMailer, 'sendMail')
+      sinon.spy(mailer, 'sendMail')
 
       sendVerificationEmail req, res, next
 
     after ->
       OneTimeToken.issue.restore()
-      fakeMailer.sendMail.restore()
+      mailer.sendMail.restore()
 
     it 'should continue', ->
       next.should.have.been.called
@@ -60,7 +55,7 @@ describe 'Send Verification Email', ->
       OneTimeToken.issue.should.not.have.been.called
 
     it 'should not send an email', ->
-      fakeMailer.sendMail.should.not.have.been.called
+      mailer.sendMail.should.not.have.been.called
 
 
 
@@ -91,13 +86,13 @@ describe 'Send Verification Email', ->
           ttl: 3600 * 24 * 7
           use: 'emailVerification'
         })
-      sinon.stub(fakeMailer, 'sendMail').callsArgWith 3, null, null
+      sinon.stub(mailer, 'sendMail').callsArgWith 3, null, null
 
       sendVerificationEmail req, res, next
 
     after ->
       OneTimeToken.issue.restore()
-      fakeMailer.sendMail.restore()
+      mailer.sendMail.restore()
 
     it 'should issue a token to the user', ->
       OneTimeToken.issue.should.have.been.calledWith sinon.match({
@@ -115,25 +110,25 @@ describe 'Send Verification Email', ->
       })
 
     it 'should send to the user', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match.object, sinon.match({
           to: req.user.email
         })
 
     it 'should provide a subject', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match.object, sinon.match({
           subject: sinon.match.string
         })
 
     it 'should render with the user email', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match({
           email: req.user.email
         })
 
     it 'should render with the user given name', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match({
           name: {
             first: req.user.givenName
@@ -141,7 +136,7 @@ describe 'Send Verification Email', ->
         })
 
     it 'should render with the user family name', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match({
           name: {
             last: req.user.familyName
@@ -149,7 +144,7 @@ describe 'Send Verification Email', ->
         })
 
     it 'should render with the verification url', ->
-      fakeMailer.sendMail.should.have.been
+      mailer.sendMail.should.have.been
         .calledWith 'verifyEmail', sinon.match({
           verifyURL: sinon.match.string
         })
@@ -157,5 +152,3 @@ describe 'Send Verification Email', ->
     it 'should continue', ->
       next.should.have.been.called
       next.should.not.have.been.calledWith sinon.match.any
-
-

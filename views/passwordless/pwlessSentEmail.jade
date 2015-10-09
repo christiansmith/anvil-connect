@@ -1,0 +1,34 @@
+doctype html
+//- 
+  Worded so that we do not give away whether user has an 
+  account already.
+
+html(lang="en")
+  head
+    title E-mail sent
+
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300|Playfair+Display+SC:900,400')
+  body
+
+    .anvilform
+      img.logo(src='/images/anvil.svg', alt='Anvil Connect')
+
+      .panel
+        if error
+          .error= error
+        if message
+          .message= message
+        h3 Please check your email.
+        p
+          | We sent you a link. Please check your e-mail.
+        p 
+          | At most, it should take several minutes to receive this e-mail.
+        p
+          | If you're having trouble receiving it, make sure that #{from}
+          | is in your contacts/whitelist. Otherwise the e-mail may be in the
+          | spam folder or discarded.
+        p Still having trouble?
+        div
+          a.button.full-width(href=resendURL) Resend e-mail.

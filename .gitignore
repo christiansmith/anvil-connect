@@ -1,4 +1,5 @@
 config
+coverage
 hooks
 keys
 node_modules
