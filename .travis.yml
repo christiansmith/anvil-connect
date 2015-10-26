@@ -1,29 +1,28 @@
 sudo: false
-
 language: node_js
-
 node_js:
-  - "4.0"
-  - "iojs"
-  - "0.12"
-
+- '4.0'
+- iojs
+- '0.12'
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
-
+  code_climate:
+    repo_token: e12fdd046a497616859828b532c70fb0aefdfcfd7ee92b1ea3ba495dfb0bbe6f
 before_install:
-  - npm install -g npm
-  - npm install -g node-gyp
-  - node-gyp clean
-
+- npm install -g npm
+- npm install -g node-gyp
+- npm install -g codeclimate-test-reporter
+- node-gyp clean
+after_script:
+- codeclimate-test-reporter < coverage/lcov.info
 install:
-  - export CXX=g++-4.8
-  - $CXX --version
-  - npm install
-
-script: 
-  - NODE_ENV=test npm run test-all
-  - NODE_ENV=test npm run lint
+- export CXX=g++-4.8
+- $CXX --version
+- npm install
+script:
+- NODE_ENV=test npm run coverage
+- NODE_ENV=test npm run lint

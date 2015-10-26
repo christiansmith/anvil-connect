@@ -4,6 +4,7 @@
 [![IRC](https://img.shields.io/badge/Slack-IRC-green.svg)](https://anvilresearch.slack.com/account/gateways)
 
 [![Build Status](https://travis-ci.org/anvilresearch/connect.svg?branch=master)](https://travis-ci.org/anvilresearch/connect)
+[![Code Climate](https://codeclimate.com/github/anvilresearch/connect/badges/gpa.svg)](https://codeclimate.com/github/anvilresearch/connect)
 ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg)
 ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
 
