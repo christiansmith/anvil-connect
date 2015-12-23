@@ -1,6 +1,7 @@
 {
   "issuer": "https://your.authorization.server",
   "client_registration": "dynamic",
+  "cookie_secret": "<INSERT_RANDOM_BYTES>",
   "providers": {
     "google": {
       "client_id": "<CLIENT_ID>",
@@ -14,5 +15,6 @@
   "redis": {
     "url": "redis://HOST:PORT",
     "auth": "PASSWORD"
-  }
+  },
+  "session_secret": "<INSERT_RANDOM_BYTES"
 }
