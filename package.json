@@ -64,6 +64,7 @@
     "start": "node server.js",
     "test": "eslint --ignore-path .gitignore . && echo Code looks good! && mocha test/unit",
     "lint": "eslint --ignore-path .gitignore . && echo Code looks good!",
+    "test-cov": "istanbul cover --config test/istanbul.yml node_modules/mocha/bin/_mocha -- --require coffee-coverage/register-istanbul test/unit",
     "test-watch": "mocha test/unit --watch",
     "test-integration": "mocha test/integration",
     "test-integration-watch": "mocha test/integration --watch",
@@ -91,7 +92,9 @@
     "nock": "^3.4.1",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.0.1"
+    "supertest": "^1.0.1",
+    "istanbul": "^0.3.5",
+    "coffee-coverage": "^0.6.3"
   },
   "dependencies": {
     "anvil-connect-jwt": "^0.1.6",

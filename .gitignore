@@ -11,3 +11,4 @@ public/vendor
 npm-debug.log
 .settings
 .vscode
+coverage
