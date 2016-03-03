@@ -8,6 +8,7 @@ var path = require('path')
 var bunyan = require('express-bunyan-logger')
 var ensureWritableDirectory = require('../lib/fs-utils').ensureWritableDirectory
 var oidc = require('../oidc')
+var routes = require('../routes')
 
 var FN_ARGS_SPLIT = /^[^\(]*\(\s*([^\)]*)\)/m
 
@@ -15,17 +16,20 @@ function getSignature (fn) {
   return fn.toString().match(FN_ARGS_SPLIT)[1]
 }
 
-function oidcLogging (addLogging) {
-  for (var idx in oidc) {
-    var fn = oidc[idx]
-    if (getSignature(fn) === addLogging.signature) {
-      // wrap function with logging
-      oidc[fn.name] = addLogging(fn)
+function addLoggingAnvil (addLogging) {
+  function addLoggingModule (module) {
+    for (var idx in module) {
+      var fn = module[idx]
+      if (getSignature(fn) === addLogging.signature) {
+        // wrap function with logging
+        module[fn.name] = addLogging(fn)
+      }
     }
   }
+  addLoggingModule(oidc)
 }
 
-function debugLogging () {
+function addDebugLogging () {
   var addLogging = function (fn) {
     return function (req, res, next) {
       req.log.debug(fn.name)
@@ -33,10 +37,10 @@ function debugLogging () {
     }
   }
   addLogging.signature = 'req, res, next'
-  oidcLogging(addLogging)
+  addLoggingAnvil(addLogging)
 }
 
-function errorLogging () {
+function addErrorLogging () {
   var addLogging = function (fn) {
     return function (err, req, res, next) {
       req.log.error(err, fn.name)
@@ -44,7 +48,7 @@ function errorLogging () {
     }
   }
   addLogging.signature = 'err, req, res, next'
-  oidcLogging(addLogging)
+  addLoggingAnvil(addLogging)
 }
 
 /**
@@ -67,21 +71,21 @@ module.exports = function (options) {
       case 'fatal':
         break
       case 'error':
-        errorLogging()
+        addErrorLogging()
         break
       case 'warn':
-        errorLogging()
+        addErrorLogging()
         break
       case 'info':
-        errorLogging()
+        addErrorLogging()
         break
       case 'debug':
-        debugLogging()
-        errorLogging()
+        addDebugLogging()
+        addErrorLogging()
         break
       case 'trace':
-        debugLogging()
-        errorLogging()
+        addDebugLogging()
+        addErrorLogging()
         break
     }
 
