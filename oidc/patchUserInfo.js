@@ -9,7 +9,7 @@ var NotFoundError = require('../errors/NotFoundError')
  * Export
  */
 
-module.exports = function (req, res, next) {
+function patchUserInfo (req, res, next) {
   // Map updates given in the request body to attributes
   // in the scopes authorized by the access token.
   var scopeUserAttributes = []
@@ -43,3 +43,5 @@ module.exports = function (req, res, next) {
     res.status(200).json(userInfo)
   })
 }
+
+module.exports = patchUserInfo

@@ -9,7 +9,7 @@ var NotFoundError = require('../errors/NotFoundError')
  * Export
  */
 
-module.exports = function (req, res, next) {
+function getUserInfo (req, res, next) {
   // Respond with userinfo based on authorized scopes
   User.get(req.claims.sub, function (err, user) {
     if (err) { return next(err) }
@@ -33,3 +33,5 @@ module.exports = function (req, res, next) {
     res.status(200).json(userInfo)
   })
 }
+
+module.exports = getUserInfo
