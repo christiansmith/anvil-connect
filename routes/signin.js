@@ -13,13 +13,13 @@ var providers = require('../providers')
 var providerInfo = {}
 var providerNames = Object.keys(providers)
 for (var i = 0; i < providerNames.length; i++) {
-  providerInfo[providerNames[i]] = providers[providerNames[i]]
+  providerInfo[ providerNames[ i ] ] = providers[ providerNames[ i ] ]
 }
 var visibleProviders = {}
 // Only render providers that are not marked as hidden
 Object.keys(settings.providers).forEach(function (providerID) {
-  if (!settings.providers[providerID].hidden) {
-    visibleProviders[providerID] = settings.providers[providerID]
+  if (!settings.providers[ providerID ].hidden) {
+    visibleProviders[ providerID ] = settings.providers[ providerID ]
   }
 })
 
@@ -40,6 +40,7 @@ module.exports = function (server) {
       res.render('signin', {
         params: qs.stringify(req.query),
         request: req.query,
+        headers: req.headers,
         providers: visibleProviders,
         providerInfo: providerInfo,
         mailSupport: !!(mailer.transport)
