@@ -40,7 +40,7 @@ module.exports = function (server) {
       res.render('signin', {
         params: qs.stringify(req.query),
         request: req.query,
-        headers: req.headers,
+        referer: req.headers['referer'],
         providers: visibleProviders,
         providerInfo: providerInfo,
         mailSupport: !!(mailer.transport)

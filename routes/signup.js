@@ -29,7 +29,7 @@ module.exports = function (server) {
       res.render('signup', {
         params: qs.stringify(req.query),
         request: req.query,
-        headers: req.headers,
+        referer: req.headers['referer'],
         providers: settings.providers
       })
     }
