@@ -49,6 +49,7 @@ require('./routes/rest/v1/scopes')(server)
 require('./routes/rest/v1/roles')(server)
 require('./routes/rest/v1/userRoles')(server)
 require('./routes/rest/v1/roleScopes')(server)
+require('./routes/rest/v1/roleUsers')(server)
 
 /**
  * Error Handler
