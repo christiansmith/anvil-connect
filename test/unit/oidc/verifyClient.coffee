@@ -135,3 +135,35 @@ describe 'Verify Client', ->
 
     it 'should provide a status code', ->
       err.statusCode.should.equal 400
+
+
+  describe 'with client without redirect uri', ->
+
+    before (done) ->
+      client = {}
+      sinon.stub(Client, 'get').callsArgWith(2, null, client)
+      req =
+        connectParams:
+          redirect_uri: 'https://redirect.uri/cb'
+          client_id: 'id'
+      res  = {}
+      next = sinon.spy()
+
+      verifyClient req, res, (error) ->
+        err = error
+        done()
+
+    after ->
+      Client.get.restore()
+
+    it 'should provide an AuthorizationError', ->
+      err.name.should.equal 'AuthorizationError'
+
+    it 'should provide an error code', ->
+      err.error.should.equal 'invalid_request'
+
+    it 'should provide an error description', ->
+      err.error_description.should.equal 'Mismatching redirect uri'
+
+    it 'should provide a status code', ->
+      err.statusCode.should.equal 400

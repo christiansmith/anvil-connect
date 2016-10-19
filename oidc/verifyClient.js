@@ -53,7 +53,7 @@ function verifyClient (req, res, next) {
     req.client = client
 
     // Redirect URI must be configured for this client.
-    if (client.redirect_uris.indexOf(params.redirect_uri) === -1) {
+    if (!client.redirect_uris || client.redirect_uris.indexOf(params.redirect_uri) === -1) {
       return next(new AuthorizationError({
         error: 'invalid_request',
         error_description: 'Mismatching redirect uri',
