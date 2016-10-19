@@ -17,7 +17,7 @@ var FN_ARGS_SPLIT = /^[^\(]*\(\s*([^\)]*)\)/m
  */
 
 function getParams (fn) {
-  return fn.toString().match(FN_ARGS_SPLIT)[1]
+  return fn.toString().match(FN_ARGS_SPLIT)[ 1 ]
 }
 
 /**
@@ -37,13 +37,14 @@ function getParams (fn) {
 function addLoggingAnvil (addLogging) {
   function addLoggingModule (module) {
     for (var idx in module) {
-      var fn = module[idx]
+      var fn = module[ idx ]
       if (getParams(fn) === addLogging.params) {
         // wrap function with logging
-        module[fn.name] = addLogging(fn)
+        module[ fn.name ] = addLogging(fn)
       }
     }
   }
+
   addLoggingModule(oidc)
 }
 
@@ -81,7 +82,9 @@ function addErrorLogging () {
  */
 
 module.exports = function (options) {
-  var logger
+  if (this.logger) {
+    return this.logger
+  }
   var config = { name: 'request', streams: [], level: 'info' }
 
   if (!env.match(/test/i)) {
@@ -121,8 +124,6 @@ module.exports = function (options) {
     }
   }
 
-  logger = bunyan(config)
-
-  module.exports = logger
-  return logger
+  this.logger = bunyan(config)
+  return this.logger
 }
