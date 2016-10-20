@@ -4,24 +4,9 @@
 
 var settings = require('../boot/settings')
 var oidc = require('../oidc')
-var mailer = require('../boot/mailer').getMailer()
 var authenticator = require('../lib/authenticator')
-var qs = require('qs')
 var NotFoundError = require('../errors/NotFoundError')
-var providers = require('../providers')
-
-var providerInfo = {}
-var providerNames = Object.keys(providers)
-for (var i = 0; i < providerNames.length; i++) {
-  providerInfo[providerNames[i]] = providers[providerNames[i]]
-}
-var visibleProviders = {}
-// Only render providers that are not marked as hidden
-Object.keys(settings.providers).forEach(function (providerID) {
-  if (!settings.providers[providerID].hidden) {
-    visibleProviders[providerID] = settings.providers[providerID]
-  }
-})
+var renderSignin = require('../render/renderSignin')
 
 /**
  * Third Party Provider Authorization Endpoints
@@ -71,15 +56,9 @@ module.exports = function (server) {
 
           // render the signin screen with an error
           if (!user) {
-            res.render('signin', {
-              params: qs.stringify(req.connectParams),
-              request: req.body,
-              error: info.message,
-              providers: visibleProviders,
-              providerInfo: providerInfo,
-              mailSupport: !!(mailer.transport)
+            renderSignin(res, req.body, {
+              error: info.message
             })
-
           // login the user
           } else {
             authenticator.login(req, user)

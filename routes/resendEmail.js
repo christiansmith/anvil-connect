@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var mailer = require('../boot/mailer').getMailer()
+var mailer = require('../boot/mailer')
 var oidc = require('../oidc')
 var User = require('../models/User')
 

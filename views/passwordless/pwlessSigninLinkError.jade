@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+  head
+    title Email link processed | Anvil Connect
+
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300|Playfair+Display+SC:900,400')
+  body
+
+    .anvilform
+      img.logo(src='/images/anvil.svg', alt='Anvil Connect')
+
+      .panel
+        if error
+          .error= error
+        else
+          //- this case should never happen for passwordless..
+          div Your e-mail link has now been verified!

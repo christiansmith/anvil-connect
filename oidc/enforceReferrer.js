@@ -18,9 +18,11 @@ module.exports = function (pathname) {
     pathname = [ pathname ]
   }
 
-  var host = url.parse(settings.issuer).host
-
   return function enforceReferrer (req, res, next) {
+    // allows changing settings for test by not reading them
+    // during module initialization.
+
+    var host = url.parse(settings.issuer).host
     var referrer = req.get('referrer')
 
     // Only allow requests with a referrer defined

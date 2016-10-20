@@ -97,6 +97,11 @@ function loadProviders (dir, files) {
           if (typeof oamr !== 'undefined') {
             provider.amr = oamr
           }
+          // override the default token TTL (expiration) for the provider
+          var ottl = settings.providers[providerName].tokenTTL
+          if (typeof ottl !== 'undefined') {
+            provider.tokenTTL = ottl
+          }
 
           // provider-specific refresh_userinfo setting
           var orefuser_info = settings.providers[providerName].refresh_userinfo

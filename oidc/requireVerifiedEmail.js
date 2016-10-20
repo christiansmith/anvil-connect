@@ -12,7 +12,7 @@
  */
 
 var Role = require('../models/Role')
-var mailer = require('../boot/mailer').getMailer()
+var mailer = require('../boot/mailer')
 var settings = require('../boot/settings')
 var url = require('url')
 
