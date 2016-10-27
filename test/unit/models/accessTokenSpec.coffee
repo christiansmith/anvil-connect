@@ -247,25 +247,54 @@ describe 'AccessToken', ->
 
     describe 'with invalid request', ->
 
-      before (done) ->
-        sinon.stub(AccessToken, 'insert').callsArgWith(1, new Error)
-        req =
-          user: {}
-          client: {}
-        AccessToken.issue req, (error, response) ->
-          err = error
-          res = response
-          done()
+      describe 'with insert exception', ->
 
-      after ->
-        AccessToken.insert.restore()
+        before (done) ->
+          sinon.stub(AccessToken, 'insert').callsArgWith(1, new Error)
+          req =
+            user: {}
+            client: {}
+          AccessToken.issue req, (error, response) ->
+            err = error
+            res = response
+            done()
 
-      it 'should provide an error', ->
-        expect(err).to.be.an('Error')
+        after ->
+          AccessToken.insert.restore()
 
-      it 'should not provide a value', ->
-        expect(res).to.equal undefined
+        it 'should provide an error', ->
+          expect(err).to.be.an('Error')
 
+        it 'should not provide a value', ->
+          expect(res).to.equal undefined
+
+      describe 'with toJWT exception', ->
+
+        before (done) ->
+          instance = new AccessToken
+            iss: settings.issuer
+            uid: 'uuid1'
+            cid: 'uuid2'
+            scope: 'openid profile'
+          sinon.stub(AccessToken, 'insert').callsArgWith(1, null, instance)
+          sinon.stub(AccessToken.prototype, 'toJWT').throws(new Error)
+          req =
+            user: {}
+            client: {}
+          AccessToken.issue req, (error, response) ->
+            err = error
+            res = response
+            done()
+
+        after ->
+          AccessToken.insert.restore()
+          AccessToken.prototype.toJWT.restore()
+
+        it 'should provide an error', ->
+          expect(err).to.be.an('Error')
+
+        it 'should not provide a value', ->
+          expect(res).to.equal undefined
 
     describe 'with valid request', ->
 

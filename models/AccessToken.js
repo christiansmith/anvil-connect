@@ -184,7 +184,11 @@ AccessToken.issue = function (request, callback) {
     // Unless the client is set to issue a random token,
     // transform it to a signed JWT.
     if (request.client.access_token_type !== 'random') {
-      response.access_token = token.toJWT(settings.keys.sig.prv)
+      try {
+        response.access_token = token.toJWT(settings.keys.sig.prv)
+      } catch (err) {
+        return callback(err)
+      }
     }
 
     callback(null, response)
