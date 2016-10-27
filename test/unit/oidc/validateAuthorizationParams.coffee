@@ -358,14 +358,14 @@ describe 'Validate Authorization Parameters', ->
 
 
 
-    describe 'with missing "openid" scope', ->
+    describe 'with missing or malformed "openid" scope', ->
 
       before (done) ->
         params =
           redirect_uri: 'https://redirect.uri'
           response_type: 'code'
           client_id: 'uuid'
-          scope: 'insufficient'
+          scope: 'openidinsufficient'
 
         validateAuthorizationParams req(params), res, (error) ->
           err = error

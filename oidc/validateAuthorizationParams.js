@@ -183,7 +183,7 @@ function validateAuthorizationParams (req, res, next) {
   }
 
   // missing openid scope
-  if (params.scope.indexOf('openid') === -1) {
+  if (params.scope.split(' ').indexOf('openid') === -1) {
     return next(new AuthorizationError({
       error: 'invalid_scope',
       error_description: 'Missing openid scope',
