@@ -71,7 +71,14 @@ Scope.determine = function (scopes, subject, callback) {
 
       // filter authorized scope
       scopes = knownScope.filter(function (scope) {
-        return !scope.restricted || authorizedScope.indexOf(scope.name) !== -1
+        var found;
+        if (typeof authorizedScope === 'object') {
+          authorizedScope.map(function(result) {
+            found = found || (result.indexOf(scope.name) !== -1);
+          });
+        }
+        
+        return !scope.restricted || found || authorizedScope.indexOf(scope.name) !== -1
       })
 
       // extract scope names
