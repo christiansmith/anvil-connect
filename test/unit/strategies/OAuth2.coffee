@@ -50,7 +50,7 @@ describe 'OAuth2 Strategy', ->
       name: 'name'
 
   config =
-    clientId:      'id',
+    client_id:      'id',
     client_secret:  'secret'
     scope:          ['c']
 
@@ -216,7 +216,7 @@ describe 'OAuth2 Strategy', ->
 
       it 'should include client_id', ->
         strategy.redirect.should.have.been.calledWith sinon.match(
-          'client_id=' + config.clientId
+          'client_id=' + config.client_id
         )
       it 'should include redirect_uri', ->
         strategy.redirect.should.have.been.calledWith sinon.match(

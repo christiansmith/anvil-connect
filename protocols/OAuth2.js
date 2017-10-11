@@ -127,7 +127,7 @@ function authorizationRequest (req, options) {
   var config = this.client
   var url = URL.parse(endpoints.authorize.url)
   var responseType = 'code'
-  var clientId = config.clientId
+  var clientId = config.client_id
   var redirectUri = provider.redirect_uri
   var state = options.state
 
@@ -177,7 +177,7 @@ function authorizationCodeGrant (code, done) {
   // required token parameters
   params.grant_type = 'authorization_code'
   params.code = code
-  params.redirectUri = provider.redirect_uri
+  params.redirect_uri = provider.redirect_uri
 
   // start building the request
   var req = request[method || 'post'](url)
