@@ -26,7 +26,8 @@ var sessionState = require('../oidc/sessionState')
 function authorize (req, res, next) {
   var params = req.connectParams
   var responseTypes = params.response_type.trim().split(' ')
-  var responseMode = (params.response_mode && params.response_mode.trim()) ||
+  var responseMode = params.response_mode && params.response_mode.trim()
+  var responseModeSeparator = responseMode ||
     (params.response_type === 'code' ||
       params.response_type === 'none') ? '?' : '#'
 
@@ -114,10 +115,23 @@ function authorize (req, res, next) {
         var session = sessionState(req.client, req.client.client_uri, opbs)
         response.session_state = session
       }
-
-      res.redirect(
-        params.redirect_uri + responseMode + qs.stringify(response)
-      )
+      if (responseMode === 'form_post') {
+        res.set({
+          'Cache-Control': 'no-cache, no-store',
+          'Pragma': 'no-cache'
+        })
+        res.render('form_post', {
+          redirect_uri: params.redirect_uri,
+          state: params.state,
+          access_token: response.access_token,
+          id_token: response.id_token,
+          code: response.code
+        })
+      } else {
+        res.redirect(
+          params.redirect_uri + responseModeSeparator + qs.stringify(response)
+        )
+      }
     })
 
   // ACCESS DENIED

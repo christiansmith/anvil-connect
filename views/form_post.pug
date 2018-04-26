@@ -1,0 +1,13 @@
+html
+  head
+    title Submit This Form
+  body(onload="javascript:document.forms[0].submit()")
+    form(method="post", action=redirect_uri)
+      if state
+        input(type="hidden", name="state", value=state)
+      if access_token
+        input(type="hidden", name="access_token", value=access_token)
+      if id_token
+        input(type="hidden", name="id_token", value=id_token)
+      if code
+        input(type="hidden", name="code", value=code)

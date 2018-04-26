@@ -105,7 +105,8 @@ settings.response_types_supported = [
 
 settings.response_modes_supported = [
   'query',
-  'fragment'
+  'fragment',
+  'form_post'
 ]
 
 /**

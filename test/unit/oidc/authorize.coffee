@@ -75,6 +75,57 @@ describe 'Authorize', ->
     it 'should not provide session_state', ->
       res.redirect.should.not.have.been.calledWith sinon.match('session_state=')
 
+  describe 'with consent,  "code" response type and "form_post" response_mode', ->
+
+    before (done) ->
+      sinon.stub(AuthorizationCode, 'insert').callsArgWith(1, null, {
+        code: '1234'
+      })
+
+      req =
+        session: {}
+        client:
+          _id: 'uuid1'
+        user:
+          _id: 'uuid2'
+        connectParams:
+          authorize:      'true'
+          response_type:  'code'
+          response_mode:  'form_post'
+          redirect_uri:   'https://host/callback'
+          state:          'r4nd0m'
+      res =
+        set: sinon.spy()
+        render: sinon.spy()
+      next = sinon.spy()
+
+      authorize req, res, next
+      done()
+
+    after ->
+      AuthorizationCode.insert.restore()
+
+    it 'should set default max_age if none is provided', ->
+      AuthorizationCode.insert.should.have.been.calledWith sinon.match({
+        max_age: undefined
+      })
+
+    it 'should set cache-control headers', ->
+      res.set.should.have.been.calledWithExactly({
+        'Cache-Control': 'no-cache, no-store',
+        'Pragma': 'no-cache'
+      })
+
+    it 'should respond with the form_post', ->
+      res.render.should.have.been.calledWithExactly(
+        "form_post", {
+          redirect_uri: req.connectParams.redirect_uri
+          state: req.connectParams.state
+          access_token: undefined
+          id_token: undefined
+          code: '1234'
+        }
+      )
 
 
   describe 'with consent and "code" response type and "max_age" param', ->
@@ -462,7 +513,7 @@ describe 'Authorize', ->
 
 
 
-  describe 'with consent and response mode param', ->
+  describe 'with consent and response mode query', ->
 
     before (done) ->
       response = AccessToken.initialize().project('issue')
@@ -499,7 +550,52 @@ describe 'Authorize', ->
     it 'should provide a query string', ->
       res.redirect.should.have.been.calledWith sinon.match('?')
 
+  describe 'with consent and response mode form_post', ->
+    response = AccessToken.initialize().project('issue')
 
+    before (done) ->
+      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
+
+      req =
+        session: {}
+        client:
+          _id: 'uuid1'
+        user:
+          _id: 'uuid2'
+        connectParams:
+          authorize:      'true'
+          response_type:  'id_token token'
+          response_mode:  'form_post'
+          redirect_uri:   'https://host/callback'
+          nonce:          'n0nc3'
+          state:          'r4nd0m'
+      res =
+        set: sinon.spy()
+        render: sinon.spy()
+      next = sinon.spy()
+
+      authorize req, res, next
+      done()
+
+    after ->
+      AccessToken.issue.restore()
+
+    it 'should set cache-control headers', ->
+      res.set.should.have.been.calledWithExactly({
+        'Cache-Control': 'no-cache, no-store',
+        'Pragma': 'no-cache'
+      })
+
+    it "should respond with form_post", ->
+      res.render.should.have.been.calledWithExactly(
+        "form_post", {
+          redirect_uri: req.connectParams.redirect_uri
+          state: req.connectParams.state
+          access_token: response.access_token
+          id_token: response.id_token
+          code: undefined
+        }
+      )
 
 
   describe 'without consent', ->

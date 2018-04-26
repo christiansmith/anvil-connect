@@ -22,7 +22,8 @@ var validResponseTypes = [
 
 var validResponseModes = [
   'query',
-  'fragment'
+  'fragment',
+  'form_post'
 ]
 
 /**
