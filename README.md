@@ -61,7 +61,7 @@ Every Thursday at 9AM PDT / 12PM EDT / 4PM GMT we get together to map out the fu
 
 ### Pair Programming
 
-We often pair on more challening or new code, hop into Gitter or Slack and join us, or request your own session.
+We often pair on more challenging or new code, hop into Gitter or Slack and join us, or request your own session.
 
 ### Need more engagement?
 
