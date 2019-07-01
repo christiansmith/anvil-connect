@@ -66,7 +66,7 @@ function verifier (provider, config) {
 
     User.connect(req, null, user, function (err, connectUser, info) {
       if (err) { return done(err) }
-      if (connectUser && connectUser._groups) {
+      if (connectUser && user._groups) {
         // Put the distinguished names of the directory server groups the user is
         // in into an array.
         var rolesToAdd = user._groups.map(function (group) {
@@ -116,10 +116,15 @@ function verifier (provider, config) {
 
             function (next) {
               async.each(rolesToAdd, function (roleName, callback) {
-                User.addRoles(connectUser, roleName, function (err, result) {
+                Role.get(roleName, function (err, role) {
                   if (err) { return callback(err) }
-                  rolesToAdd.splice(rolesToAdd.indexOf(roleName), 1)
-                  callback()
+                  if (!role) { return callback() }
+
+                  User.addRoles(connectUser, roleName, function (err, result) {
+                    if (err) { return callback(err) }
+                    rolesToAdd.splice(rolesToAdd.indexOf(roleName), 1)
+                    callback()
+                  })
                 })
               }, next)
             },
